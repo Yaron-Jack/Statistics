@@ -7,6 +7,8 @@ THE Statistics GAME
 #include <iostream>
 #include <string>
 #include <vector>
+#include "sdc.h"
+
 
 static constexpr int const &Success = 0;
 static constexpr int const &ERROR = -1;
@@ -345,6 +347,53 @@ LinearTransgressionToOriginal(vector<vector<float> > &Board, float &LoopingHighe
     cout << "Real " << "Final Standard Deviation  is " << (FinalStandardDeviation - a) / b << endl;
 }
 
+void
+printHistogram(vector<vector<float> > &Board, float &LoopingHighestFrequency2, int &UserInputTable)
+{
+    for (int i = 0; i < Board.size(); i++)
+    {
+        if (Board[i][3] >= LoopingHighestFrequency2)
+        {
+            LoopingHighestFrequency2 = Board[i][3];
+        }
+    }
+    for (int j = LoopingHighestFrequency2 ; j >= 0; j--)
+    {
+        cout.width(2);
+        cout << right << j << " | ";
+        for (int i = 0; i < Board.size(); i++)
+        {
+            if ( j <= Board[i][3])
+            {
+                cout << "  x  ";
+
+                // else print blank spaces
+            }
+            else
+            {
+                cout << "     ";
+            }
+        }
+        cout << "\n";
+    }
+
+    // print last line denoted by ----
+    string Divide = "---";
+    for (int i = 0; i < UserInputTable; i++)
+    {
+        cout << Divide * UserInputTable;
+    }
+
+    cout << "\n";
+    cout << "     ";
+
+    for (int i = 0; i <= Board.size() - 1; i++)
+    {
+        cout.width(2); // width for a number
+        cout << right << Board[i][0] << "-" << Board[i][1] << " ";
+    }
+}
+
 int main()
 {
     cout << "\n\n\tStatistics \n\n";
@@ -355,7 +404,8 @@ int main()
     float SquareMiddleFx = 0;
     float Medium = 0;
     float SumSizeFrequency = 0;
-    float LoopingHighestFrequency, FinalMiddleRange, FinalAverage, FinalStandardDeviation = 0;
+    float LoopingHighestFrequency, LoopingHighestFrequency2, FinalMiddleRange, FinalAverage, FinalStandardDeviation = 0;
+
 
     cout << "\nplease enter the Board size (1 to 11): \n" << flush;
 
@@ -377,6 +427,11 @@ int main()
         Results(Board, MiddleFxSum, FxSum, SquareMiddleFx, UserInputTable, LoopingHighestFrequency,
 
                 FinalMiddleRange, FinalAverage, FinalStandardDeviation);
+
+        printHistogram(Board, LoopingHighestFrequency2, UserInputTable);
+
+        cout << " \n\n\tHooray!! "
+             << char(1) << "\n\t********************\n" << endl;
 
         char UserContinue, UserTransgression = '0';
         do
